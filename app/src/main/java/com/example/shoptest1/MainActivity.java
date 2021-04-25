@@ -18,8 +18,13 @@ import com.vk.api.sdk.auth.VKScope;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -31,13 +36,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         buttonLogin = findViewById(R.id.button_login);
         buttonLogin.setOnClickListener(this::onClick);
-        VK.addTokenExpiredHandler(vkTokenExpiredHandler);
+        //VK.addTokenExpiredHandler(vkTokenExpiredHandler);
+        //Log.d("vkTokenExpiredHandler: ", String.valueOf(vkTokenExpiredHandler));
     }
 
     VKTokenExpiredHandler vkTokenExpiredHandler = new VKTokenExpiredHandler() {
         @Override
         public void onTokenExpired() {
-            Log.d("Token", "brrrrrrrrr");
+            //Log.d("Token", "brrrrrrrrr");
         }
     };
 
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onLogin(@NotNull VKAccessToken vkAccessToken) {
                 Log.d("Login", "Excellent!!!");
+                Intent i = new Intent(MainActivity.this, MarketActivity.class);
+                startActivity(i);
             }
 
             @Override
@@ -62,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         VK.login((Activity) contextMain, Collections.singleton(VKScope.WALL));
-        Log.d("onClick", "OK");
+        //VK.login((Activity) contextMain, Collections.singleton(VKScope.PHOTOS));
+       // Log.d("onClick", "OK");
     }
 }
