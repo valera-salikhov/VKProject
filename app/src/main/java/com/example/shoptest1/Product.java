@@ -98,6 +98,6 @@ public class Product {
         product.thumbPhoto = new StringBuilder(item).substring(item.indexOf("thumb_photo") + 14,
                 item.indexOf("\",", item.indexOf("thumb_photo")));
         product.cartQuantity = Integer.parseInt(new StringBuilder(item).substring(item.indexOf("cart_quantity") + 15,
-                item.indexOf("}", item.indexOf("cart_quantity"))));
-    }    // для работы этого метода нужно разбить строку на подстроки item
+                item.indexOf("cart_quantity") + 16));
+    }
 }

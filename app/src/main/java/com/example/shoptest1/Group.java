@@ -62,6 +62,6 @@ public class Group {
        group.photo_100 = new StringBuilder(item).substring(item.indexOf("photo_100") + 12,
                item.indexOf("\",", item.indexOf("photo_100")));
        group.photo_200 = new StringBuilder(item).substring(item.indexOf("photo_200") + 12,
-               item.indexOf("\"}", item.indexOf("photo_200")));
+               item.indexOf("\"", item.indexOf("photo_200") + 13));
    }
 }

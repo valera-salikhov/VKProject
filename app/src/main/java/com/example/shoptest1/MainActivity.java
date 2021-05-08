@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import com.vk.api.sdk.VK;
 import com.vk.api.sdk.VKApiManager;
 import com.vk.api.sdk.VKMethodCall;
@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     OkHttpClient client = new OkHttpClient();
     Button buttonLogin;
     Context contextMain = this;
-    TextView tw;
     String accessToken = new String();
     String userId;
     private VKScope[] scope = new VKScope[]{VKScope.MARKET, VKScope.GROUPS};
@@ -45,25 +44,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tw = findViewById(R.id.textView);
         buttonLogin = findViewById(R.id.button_login);
         buttonLogin.setOnClickListener(this::onClick);
-        //VK.addTokenExpiredHandler(vkTokenExpiredHandler);
-        //Log.d("vkTokenExpiredHandler: ", String.valueOf(vkTokenExpiredHandler));
-
     }
 
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         VKAuthCallback callback = new VKAuthCallback() {
             @Override
             public void onLogin(@NotNull VKAccessToken vkAccessToken) {
                 accessToken = vkAccessToken.getAccessToken();
                 userId = vkAccessToken.getUserId().toString();
                 Log.d("VKAccessToken", accessToken);
-                Intent i = new Intent(MainActivity.this, MarketActivity.class);
+                String groupsStr = new String();
+                //String url = "https://api.vk.com/method/groups.get?v=5.52&access_token="
+                //        + accessToken + "&user_id=" + userId + "&extended=1";
+                String url = "https://api.vk.com/method/groups.get?v=5.52&access_token="
+                        + accessToken + "&user_id=" + userId + "&extended=1&filter=editor";
+                GetCall getGroups = new GetCall();
+                try {
+                    groupsStr = getGroups.execute(url).get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent i = new Intent(MainActivity.this, GroupsEditor.class);
                 i.putExtra("access_token", accessToken);
                 i.putExtra("user_id", userId);
+                i.putExtra("getGroupsHttps", groupsStr);
                 startActivityForResult(i, 1);
             }
 
@@ -79,45 +87,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        /*
-        AccessToken accessToken = new AccessToken();
-        String accessTokenMarket = new String();
-        try {
-            accessTokenMarket = accessToken.execute("https://oauth.vk.com/authorize?client_id=7823461&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=134217728&response_type=token").get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        tw.setText(accessTokenMarket);
-
-         */
         VK.login((Activity) contextMain, Arrays.asList(scope));
-        //VKMethodCall call = new VKMethodCall.Builder().method("market.get").build();
-
-       // Log.d("onClick", "OK");
     }
 
-
-    private class AccessToken extends AsyncTask<String, Integer, String> {
-
+    private class GetCall extends AsyncTask<String, Integer, String>{
         @Override
         protected String doInBackground(String... urls) {
             String url = urls[0];
             Request request = new Request.Builder().url(url).build();
+
             try (Response response = client.newCall(request).execute()) {
                 String resp = response.body().string();
-                int start = resp.indexOf("access_token=");
-                int end = resp.indexOf("&", start + 1);
-                String accessToken = new StringBuilder(resp).substring(start, end);
-                return  accessToken;
+                return resp;
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
         }
     }
-
-    
-
 }

@@ -26,11 +26,20 @@ public class GroupsEditor extends AppCompatActivity {
         //backButton = findViewById(R.id.backButton);
         groupsStr = getIntent().getStringExtra("getGroupsHttps");
         countGroups = getCountGroups();
+        Group[] groups = new Group[countGroups];
+        for (int i = 0; i < countGroups; i++) {
+            groups[i] = new Group();
+        }
         //Log.d("GetGroups!", String.valueOf(countGroups));
         String[] groupNames = new String[countGroups];
         String[] groupId = new String[countGroups];
         String[] items = new String[countGroups];
-        getListGroups(items, groupNames, groupId);
+        getListGroups(items, groups);
+
+        for (int i = 0; i < countGroups; i++) {
+            groupId[i] = String.valueOf(groups[i].id);
+            groupNames[i] = groups[i].name;
+        }
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(GroupsEditor.this,
                 android.R.layout.simple_list_item_1, groupNames);
@@ -44,15 +53,6 @@ public class GroupsEditor extends AppCompatActivity {
                 startActivityForResult(intent, 3);
             }
         });
-/*
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
- */
     }
 
     private int getCountGroups() {
@@ -63,7 +63,7 @@ public class GroupsEditor extends AppCompatActivity {
         return count;
     }
 
-    private void getListGroups(String[] items, String[] groupNames, String[] groupId) {
+    private void getListGroups(String[] items, Group[] groups) {
         int start = groupsStr.indexOf("[{");
         start += 2;
         for (int i = 0; i < countGroups; i++) {
@@ -71,16 +71,10 @@ public class GroupsEditor extends AppCompatActivity {
             items[i] = new StringBuilder(groupsStr).substring(start, end);
             start = end + 3;
         }
-        Log.d("ITEM0", groupsStr);
+        //Log.d("ITEM0", groupsStr);
         for (int i = 0; i < countGroups; i++) {
-            //Log.d("ITEMS" + i, items[i]);
-            int startItemId = items[i].indexOf("id");
-            int endItemId = items[i].indexOf(",", startItemId);
-            groupId[i] = new StringBuilder(items[i]).substring(startItemId + 4, endItemId);
-            int startItemName = items[i].indexOf("name", endItemId + 1);
-            int endItemName = items[i].indexOf("\",", startItemName + 1);
-            groupNames[i] = new StringBuilder(items[i]).substring(startItemName + 7, endItemName);
-            //Log.d("ITEM" + i, "name: " + groupNames[i] + " id: " + groupId[i]);
+           // Log.d("ITEMS" + i, items[i]);
+           Group.toGroup(groups[i], items[i]);
         }
 
     }
