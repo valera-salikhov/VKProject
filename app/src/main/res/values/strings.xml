@@ -2,5 +2,95 @@
     <string name="app_name">ShopTest1</string>
     <string name="create_new_product">create new product</string>
     <string name="add_product">add product</string>
+    <string name="name">Название</string>
+    <string name="description">Описание</string>
+    <string name="price">Цена</string>
+    <string name="sku">Артикул</string>
+    <string name="ready">Готово</string>
     <integer name="com_vk_sdk_AppId">7823461</integer>
+    <string-array name="categories">
+        <item>Женская одежда</item>
+        <item>Мужская одежда</item>
+        <item>Детская одежда</item>
+        <item>Обувь и сумки</item>
+        <item>Аксессуары и украшения</item>
+        <item>Автокресла</item>
+        <item>Детские коляски</item>
+        <item>Детская комната</item>
+        <item>Игрушки</item>
+        <item>Мамам и малышам</item>
+        <item>Обучение и творчество</item>
+        <item>Школьникам</item>
+        <item>Телефоны и аксессуары</item>
+        <item>Фото- и видеокамеры</item>
+        <item>Аудио- и видеотехника</item>
+        <item>Портативная техника</item>
+        <item>Игровые приставки и игры</item>
+        <item>Техника для автомобилей</item>
+        <item>Оптические приборы</item>
+        <item>Компьютеры</item>
+        <item>Ноутбуки, нетбуки</item>
+        <item>Комплектующие и аксессуары</item>
+        <item>Периферийные устройства</item>
+        <item>Сетевое оборудование</item>
+        <item>Оргтехника и расходники</item>
+        <item>Фильмы, музыка, программы</item>
+        <item>Автомобили</item>
+        <item>Мотоциклы и мототехника</item>
+        <item>Грузовики и спецтехника</item>
+        <item>Водный транспорт</item>
+        <item>Запчасти и аксессуары</item>
+        <item>Квартиры</item>
+        <item>Комнаты</item>
+        <item>Дома, дачи, коттеджи</item>
+        <item>Земельные участки</item>
+        <item>Гаражи и машиноместа</item>
+        <item>Коммерческая недвижимость</item>
+        <item>Недвижимость за рубежом</item>
+        <item>Бытовая техника</item>
+        <item>Мебель и интерьер</item>
+        <item>Кухонные принадлежности</item>
+        <item>Текстиль</item>
+        <item>Хозяйственные товары</item>
+        <item>Ремонт и строительство</item>
+        <item>Дача, сад и огород</item>
+        <item>Декоративная косметика</item>
+        <item>Парфюмерия</item>
+        <item>Уход за лицом и телом</item>
+        <item>Приборы и аксессуары</item>
+        <item>Оптика</item>
+        <item>Активный отдых</item>
+        <item>Туризм</item>
+        <item>Охота и рыбалка</item>
+        <item>Тренажеры и фитнес</item>
+        <item>Игры</item>
+        <item>Билеты и путешествия</item>
+        <item>Книги и журналы</item>
+        <item>Коллекционирование</item>
+        <item>Музыкальные инструменты</item>
+        <item>Настольные игры</item>
+        <item>Подарочные наборы и сертификаты</item>
+        <item>Сувениры и цветы</item>
+        <item>Рукоделие</item>
+        <item>Собаки</item>
+        <item>Кошки</item>
+        <item>Грызуны</item>
+        <item>Птицы</item>
+        <item>Рыбы</item>
+        <item>Другие животные</item>
+        <item>Корма и аксессуары</item>
+        <item>Бакалея</item>
+        <item>Биопродукты</item>
+        <item>Детское питание</item>
+        <item>Еда на заказ</item>
+        <item>Напитки</item>
+        <item>Фото- и видеосъёмка</item>
+        <item>Удалённая работа</item>
+        <item>Организация мероприятий</item>
+        <item>Красота и здоровье</item>
+        <item>Установка и ремонт техники</item>
+        <item>Уборка и помощь по хозяйству</item>
+        <item>Курьеры и грузоперевозки</item>
+        <item>Обучение и развитие</item>
+    </string-array>
 </resources>

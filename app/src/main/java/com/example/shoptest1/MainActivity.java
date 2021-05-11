@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Context contextMain = this;
     String accessToken = new String();
     String userId;
-    private VKScope[] scope = new VKScope[]{VKScope.MARKET, VKScope.GROUPS};
+    private VKScope[] scope = new VKScope[]{VKScope.MARKET, VKScope.GROUPS, VKScope.PHOTOS};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,19 +90,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         VK.login((Activity) contextMain, Arrays.asList(scope));
     }
 
-    private class GetCall extends AsyncTask<String, Integer, String>{
-        @Override
-        protected String doInBackground(String... urls) {
-            String url = urls[0];
-            Request request = new Request.Builder().url(url).build();
-
-            try (Response response = client.newCall(request).execute()) {
-                String resp = response.body().string();
-                return resp;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
 }

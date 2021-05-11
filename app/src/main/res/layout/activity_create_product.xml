@@ -1,32 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateProduct">
 
-    <TextView
-        android:id="@+id/textView"
+    <Spinner
+        android:id="@+id/spinnerCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginLeft="176dp"
-        android:layout_marginTop="36dp"
-        android:text="TextView"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="548dp"
+        android:entries="@array/categories"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+    </Spinner>
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="588dp"
+        android:text="@string/ready"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
+    <TextView
+        android:id="@+id/productName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginLeft="96dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editProductName"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="217dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/custom_textview"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
+        android:inputType="textMultiLine"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="124dp"
+        android:text="@string/description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editDescription"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="214dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="76dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="264dp"
+        android:text="@string/price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editPrice"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="210dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="232dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dimension_width"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="316dp"
+        android:text="Ширина(мм)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/edit_dimension_width"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="74dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="356dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dimension_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="132dp"
+        android:layout_marginLeft="132dp"
+        android:layout_marginTop="316dp"
+        android:text="Высота(мм)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/edit_dimension_height"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="74dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="132dp"
+        android:layout_marginLeft="132dp"
+        android:layout_marginTop="356dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dimension_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="232dp"
+        android:layout_marginLeft="232dp"
+        android:layout_marginTop="316dp"
+        android:text="Глубина(мм)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/edit_dimension_length"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="74dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="356dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="448dp"
+        android:text="Вес(г)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editWeight"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="217dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginLeft="84dp"
+        android:layout_marginTop="424dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sku"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="496dp"
+        android:text="@string/sku"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editSku"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="217dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginLeft="84dp"
+        android:layout_marginTop="484dp"
+        android:background="@drawable/custom_textview"
+        android:ems="10"
+        android:inputType="number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

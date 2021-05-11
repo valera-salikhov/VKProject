@@ -20,8 +20,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class GroupMarket extends AppCompatActivity {
-    OkHttpClient client = new OkHttpClient();
-    int groupId, countProducts;
+
+    int countProducts;
+    String groupId = new String();
     ListView listView;
     String accessToken = new String();
     String productsStr = new String();
@@ -30,24 +31,14 @@ public class GroupMarket extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_market);
-        groupId = Integer.parseInt(getIntent().getStringExtra("group_id"));
+        groupId = getIntent().getStringExtra("group_id");
         listView = findViewById(R.id.listView);
         accessToken = getIntent().getStringExtra("access_token");
         addProduct = findViewById(R.id.addProduct);
 
-        String url = "https://api.vk.com/method/market.get?v=5.52&access_token=" +
-                accessToken + "&owner_id=-" + groupId;
-        GetCall getProducts = new GetCall();
-        try {
-            productsStr = getProducts.execute(url).get();
-            countProducts = getCountProducts();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        getProductsCall();
 
-
+        Log.d("GROUPID0", groupId);
         Product[] products = new Product[countProducts];
         for (int i = 0; i < countProducts; i++) {
             products[i] = new Product();
@@ -74,12 +65,29 @@ public class GroupMarket extends AppCompatActivity {
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(GroupMarket.this, CreateProduct.class);
-                i.putExtra("group_id", groupId);
-                i.putExtra("access_token", accessToken);
-                startActivityForResult(i, 1);
+                Intent intent = new Intent(GroupMarket.this, CreateProduct.class);
+                intent.putExtra("group_id", groupId);
+                intent.putExtra("access_token", accessToken);
+                startActivityForResult(intent, 1);
+                Intent intentForRetry = new Intent(GroupMarket.this, GroupMarket.class);
+                startActivity(intentForRetry);
             }
         });
+    }
+
+
+    private void getProductsCall() {
+        String url = "https://api.vk.com/method/market.get?v=5.52&access_token=" +
+                accessToken + "&owner_id=-" + groupId;
+        GetCall getProducts = new GetCall();
+        try {
+            productsStr = getProducts.execute(url).get();
+            countProducts = getCountProducts();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -104,24 +112,6 @@ public class GroupMarket extends AppCompatActivity {
         for (int i = 0; i < countProducts; i++) {
             // Log.d("ITEMS" + i, items[i]);
             Product.toProducts(products[i], items[i]);
-        }
-
-    }
-
-    private class GetCall extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            String url = urls[0];
-            Request request = new Request.Builder().url(url).build();
-
-            try (Response response = client.newCall(request).execute()) {
-                String resp = response.body().string();
-                return resp;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
         }
     }
 }
