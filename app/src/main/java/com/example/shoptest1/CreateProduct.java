@@ -1,9 +1,12 @@
 package com.example.shoptest1;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,17 +14,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CreateProduct extends AppCompatActivity {
+
+    static final int GALLERY_REQUEST = 1;
+    public static String mainPhotoStr;
+
     EditText productName, description, price, dimension_width, dimension_height, dimension_length,
             weight, sku;
     String accessToken, ownerId, category;
-    Button done;
+    Button done, choosePhoto;
     String uploadUrl;
+    Uri mainPhoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +48,7 @@ public class CreateProduct extends AppCompatActivity {
         Log.d("GROUPID1", ownerId);
         Spinner spinner = findViewById(R.id.spinnerCategory);
         done = findViewById(R.id.done);
+        choosePhoto = findViewById(R.id.choosePhoto);
         productName = findViewById(R.id.editProductName);
         description = findViewById(R.id.editDescription);
         price = findViewById(R.id.editPrice);
@@ -48,6 +65,27 @@ public class CreateProduct extends AppCompatActivity {
                 addProduct(spinner);
             }
         });
+        choosePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GALLERY_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    mainPhoto = data.getData();
+                    mainPhotoStr = mainPhoto.toString();
+                }
+                break;
+        }
     }
 
     private void getUrlPhoto() {
@@ -56,10 +94,41 @@ public class CreateProduct extends AppCompatActivity {
         GetCall getCall = new GetCall();
         try {
             uploadUrl = getCall.execute(url).get();
+            PutPhoto putPhoto = new PutPhoto();
+            String photo = putPhoto.execute().get();
+            Log.d("RESPONSE", photo);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public class PutPhoto extends AsyncTask<String, Integer, String> {
+        OkHttpClient client = new OkHttpClient();
+        @Override
+        protected String doInBackground(String... urls) {
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("dfahb", "sbdg", RequestBody.create(
+                            MediaType.parse("image/jpeg"), new File(mainPhotoStr)))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(uploadUrl)
+                    .post(requestBody)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                String resp = response.body().string();
+
+
+                return resp;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
