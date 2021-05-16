@@ -69,12 +69,11 @@ public class GroupMarket extends AppCompatActivity {
                 intent.putExtra("group_id", groupId);
                 intent.putExtra("access_token", accessToken);
                 startActivityForResult(intent, 1);
-                Intent intentForRetry = new Intent(GroupMarket.this, GroupMarket.class);
-                startActivity(intentForRetry);
+                //Intent intentForRetry = new Intent(GroupMarket.this, GroupMarket.class);
+                //startActivity(intentForRetry);
             }
         });
     }
-
 
     private void getProductsCall() {
         String url = "https://api.vk.com/method/market.get?v=5.52&access_token=" +
@@ -82,13 +81,13 @@ public class GroupMarket extends AppCompatActivity {
         GetCall getProducts = new GetCall();
         try {
             productsStr = getProducts.execute(url).get();
+            Log.d("PRODUCTSTR", productsStr);
             countProducts = getCountProducts();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     private int getCountProducts() {

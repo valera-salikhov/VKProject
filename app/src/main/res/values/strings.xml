@@ -8,6 +8,8 @@
     <string name="sku">Артикул</string>
     <string name="ready">Готово</string>
     <string name="choosePhoto">выбрать фото</string>
+    <string name="star_to_chose_photo">Перейти к выбору фотографии</string>
+    <string name="chose_the_photo">Выберите фото</string>
     <integer name="com_vk_sdk_AppId">7823461</integer>
     <string-array name="categories">
         <item>Женская одежда</item>
