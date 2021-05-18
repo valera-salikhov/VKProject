@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.concurrent.ExecutionException;
 
 public class GroupOrders extends AppCompatActivity {
-
+    ListView listViewOrders;
     String accessToken = new String();
     String groupId = new String();
     String ordersStr = new String();
@@ -18,6 +20,9 @@ public class GroupOrders extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_orders);
+
+        listViewOrders = findViewById(R.id.listViewOrders);
+
         accessToken = getIntent().getStringExtra("access_token");
         groupId = getIntent().getStringExtra("group_id");
 
@@ -32,6 +37,8 @@ public class GroupOrders extends AppCompatActivity {
         }
 
         getListOrders(items, orders);
+
+
     }
 
     private int getCountOrders() {

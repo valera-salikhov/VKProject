@@ -38,11 +38,18 @@ import org.apache.http.protocol.HttpContext;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpCookie;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -101,6 +108,7 @@ public class CreateProduct extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 PostCall postCall = new PostCall();
                 try {
                     String s = postCall.execute().get();
@@ -110,13 +118,20 @@ public class CreateProduct extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                 */
+                PostCall postCall = new PostCall();
+                String resp = new String();
+                try {
+                    resp = postCall.execute().get();
+                    Log.d("OOOOOOOO", resp);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-
-
-
-
         /*
 
         String uploadUrl = new String();
@@ -158,10 +173,57 @@ public class CreateProduct extends AppCompatActivity {
 
     }
 
+    public static Boolean uploadFile(String serverURL, File file, OkHttpClient client, String groupId) {
+        try {
+
+            RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("file", file.getName(),
+                            RequestBody.create(MediaType.parse("image/jpeg"), file))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(serverURL)
+                    .post(requestBody)
+                    .build();
+
+            Response r = client.newCall(request).execute();
+                    /*.enqueue(new Callback() {
+
+                @Override
+                public void onFailure(final Call call, final IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(final Call call, final Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        Log.d("ERRRRRROOOOORRR", ";(");
+                    }
+                    Log.d("RESPONSE", response.toString());
+                }
+            });*/
+            Log.d("RE111SP",String.valueOf(r.code()));
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public class PostCall extends AsyncTask<String, Integer, String> {
+        OkHttpClient client = new OkHttpClient();
+        @Override
+        protected String doInBackground(String... strings) {
+            File photoFile = new File(mainPhotoUriStr);
+            return String.valueOf(uploadFile(uploadUrlWithoutBracketsWithSlashes, photoFile,client,
+                    ownerId));
+        }
+    }
+/*
     public class PostCall extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            HttpClient client = HttpClientBuilder.create().build();
+           // HttpClient client = HttpClientBuilder.create().build();
             File filePhoto = new File(mainPhotoUriStr);
             HttpPost post = new HttpPost(uploadUrlWithoutBracketsWithSlashes);
             FileBody fileBody = new FileBody(filePhoto, ContentType.DEFAULT_BINARY);
@@ -175,12 +237,15 @@ public class CreateProduct extends AppCompatActivity {
             try {
                 HttpResponse response = client.execute(post);
                 Log.d("RESPONSE", response.toString());
+                return response.toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
         }
     }
+
+ */
 
     /*
     @Override
@@ -221,7 +286,9 @@ public class CreateProduct extends AppCompatActivity {
             case GALLERY_REQUEST:
                 if (resultCode == RESULT_OK) {
                     mainPhotoUri = data.getData();
-                    mainPhotoUriStr = mainPhotoUri.toString();
+                    String str = mainPhotoUri.toString();
+                    mainPhotoUriStr = new StringBuilder(str).substring(str.indexOf("/") + 1,
+                            str.length());
                     Log.d("URIPHOTO", mainPhotoUriStr);
                 }
                 break;

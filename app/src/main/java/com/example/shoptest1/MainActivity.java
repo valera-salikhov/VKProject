@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -42,8 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private VKScope[] scope = new VKScope[]{VKScope.MARKET, VKScope.GROUPS, VKScope.PHOTOS};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         buttonLogin = findViewById(R.id.button_login);
         buttonLogin.setOnClickListener(this::onClick);
     }
