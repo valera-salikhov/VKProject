@@ -11,20 +11,27 @@ public class Product {
     String description;            // описание товара
     int id;                        // id товара
     int ownerId;                   // id группы-продавца
-    int priceAmount;               // цена на товар
+    String priceAmount;               // цена на товар
     int priceCurrencyId;           // id валюты
     String priceCurrencyName;      // название валюты
     String priceCurrencyTitle;     // название валюты (не международное)
     String priceText;              // стоимость, в виде текста
     String title;                  // название товара
-    String date;                   // ???
+    String date;                   // дата
     String thumbPhoto;             // ссылка на фотографию товара
-    int cartQuantity;              // ???
+    int cartQuantity;
+    String dimensions_width;
+    String dimensions_height;
+    String dimensions_length;
+    String weight;
+    String sku;
+
 
     public Product(int availability, int categoryId, String categoryName, int categorySectionId,
                     String categorySectionName, String description, int id, int ownerId,
-                    int priceAmount, int priceCurrencyId, String priceCurrencyName, String priceCurrencyTitle,
-                    String priceText, String title, String date, String thumbPhoto, int cartQuantity) {
+                   String priceAmount, int priceCurrencyId, String priceCurrencyName, String priceCurrencyTitle,
+                    String priceText, String title, String date, String thumbPhoto, int cartQuantity, String dimensions_width,
+                   String dimensions_height, String dimensions_length, String weight, String sku) {
         this.availability = availability;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -42,6 +49,11 @@ public class Product {
         this.date = date;
         this.thumbPhoto = thumbPhoto;
         this.cartQuantity = cartQuantity;
+        this.dimensions_width = dimensions_width;
+        this.dimensions_height = dimensions_height;
+        this.dimensions_length = dimensions_length;
+        this.weight = weight;
+        this.sku = sku;
     }
 
     public Product() {
@@ -53,7 +65,7 @@ public class Product {
         this.description = "";
         this.id = -1;
         this.ownerId = 0;
-        this.priceAmount = -1;
+        this.priceAmount = "-1";
         this.priceCurrencyId = -1;
         this.priceCurrencyName = "";
         this.priceCurrencyTitle = "";
@@ -62,6 +74,11 @@ public class Product {
         this.date = "";
         this.thumbPhoto = "";
         this.cartQuantity = -1;
+        this.dimensions_width = "";
+        this.dimensions_height = "";
+        this.dimensions_length = "";
+        this.weight = "";
+        this.sku = "";
     }
 
     public static void toProducts(Product product, String item) {
@@ -81,8 +98,8 @@ public class Product {
                 item.indexOf(",", item.indexOf("id", item.indexOf("description")))));
         product.ownerId = Integer.parseInt(new StringBuilder(item).substring(item.indexOf("owner_id") + 11,
                 item.indexOf(",", item.indexOf("owner_id"))));
-        product.priceAmount = Integer.parseInt(new StringBuilder(item).substring(item.indexOf("amount", item.indexOf("price")) + 9,
-                item.indexOf("\",", item.indexOf("amount", item.indexOf("price")))));
+        product.priceAmount = new StringBuilder(item).substring(item.indexOf("amount", item.indexOf("price")) + 9,
+                item.indexOf("\",", item.indexOf("amount", item.indexOf("price"))));
         product.priceCurrencyId = Integer.parseInt(new StringBuilder(item).substring(item.indexOf("id", item.indexOf("currency")) + 4,
                 item.indexOf(",", item.indexOf("id", item.indexOf("currency")))));
         product.priceCurrencyName = new StringBuilder(item).substring(item.indexOf("name", item.indexOf("currency")) + 7,
@@ -90,7 +107,7 @@ public class Product {
         product.priceCurrencyTitle = new StringBuilder(item).substring(item.indexOf("title", item.indexOf("currency")) + 8,
                 item.indexOf("\"}", item.indexOf("title", item.indexOf("currency"))));
         product.priceText = new StringBuilder(item).substring(item.indexOf("text") + 7,
-                item.indexOf("\"}", item.indexOf("text")));
+                item.indexOf("\"", item.indexOf("text") + 7));
         product.title = new StringBuilder(item).substring(item.indexOf("title", item.indexOf("text")) + 8,
                 item.indexOf("\",", item.indexOf("title", item.indexOf("text"))));
         product.date = new StringBuilder(item).substring(item.indexOf("date") + 6,

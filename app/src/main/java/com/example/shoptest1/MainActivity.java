@@ -38,6 +38,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     OkHttpClient client = new OkHttpClient();
     Button buttonLogin;
+    TextView somethingWrongTryAgain;
     Context contextMain = this;
     String accessToken = new String();
     String userId;
@@ -50,21 +51,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        VK.login((Activity) contextMain, Arrays.asList(scope));
+        somethingWrongTryAgain = findViewById(R.id.somethingWrongTryAgain);
+        somethingWrongTryAgain.setVisibility(View.INVISIBLE);
         buttonLogin = findViewById(R.id.button_login);
         buttonLogin.setOnClickListener(this::onClick);
+
     }
 
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
         VKAuthCallback callback = new VKAuthCallback() {
             @Override
             public void onLogin(@NotNull VKAccessToken vkAccessToken) {
+                somethingWrongTryAgain.setVisibility(View.INVISIBLE);
                 accessToken = vkAccessToken.getAccessToken();
                 userId = vkAccessToken.getUserId().toString();
-                Log.d("VKAccessToken", accessToken);
                 String groupsStr = new String();
-                //String url = "https://api.vk.com/method/groups.get?v=5.52&access_token="
-                //        + accessToken + "&user_id=" + userId + "&extended=1";
-                String url = "https://api.vk.com/method/groups.get?v=5.52&access_token="
+                String url = "https://api.vk.com/method/groups.get?v=5.131&access_token="
                         + accessToken + "&user_id=" + userId + "&extended=1&filter=editor";
                 GetCall getGroups = new GetCall();
                 try {
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onLoginFailed(int i) {
-                Log.d("Login", "Bad!");
+                somethingWrongTryAgain.setVisibility(View.VISIBLE);
             }
         };
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {

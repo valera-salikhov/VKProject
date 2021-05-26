@@ -11,11 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopTest1">
+        <activity android:name=".OrdersInfo"></activity>
+        <activity android:name=".EditProduct" />
         <activity android:name=".GroupOrders" />
         <activity android:name=".CreateProduct" />
         <activity android:name=".GroupMarket" />
         <activity android:name=".GroupsEditor" />
-        <activity android:name=".MarketActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

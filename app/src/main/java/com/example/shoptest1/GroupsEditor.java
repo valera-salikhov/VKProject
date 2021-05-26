@@ -2,7 +2,6 @@ package com.example.shoptest1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.AlertDialog;
@@ -11,16 +10,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-
-import java.io.IOException;
-import java.util.function.IntToDoubleFunction;
 
 public class GroupsEditor extends AppCompatActivity {
 
@@ -138,25 +131,6 @@ public class GroupsEditor extends AppCompatActivity {
             });
             builder.setCancelable(false);
             return builder.create();
-        }
-
-
-
-    }
-
-    private void getActivityProductsOrOrders(String accessToken, String listClickedGroupId, String dialogButtonChose) {
-        switch (dialogButtonChose) {
-            case ("Товары"):
-                Intent intent = new Intent(GroupsEditor.this, GroupMarket.class);
-                intent.putExtra("group_id", listClickedGroupId);
-                intent.putExtra("access_token", accessToken);
-                startActivityForResult(intent, 1);
-                break;
-            case ("Заказы"):
-                Intent intent1 = new Intent(GroupsEditor.this, GroupOrders.class);
-                intent1.putExtra("group_id", listClickedGroupId);
-                intent1.putExtra("access_token", accessToken);
-                startActivityForResult(intent1, 1);
         }
     }
 }

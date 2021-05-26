@@ -6,10 +6,12 @@
     <string name="description">Описание</string>
     <string name="price">Цена</string>
     <string name="sku">Артикул</string>
-    <string name="ready">Готово</string>
     <string name="choosePhoto">выбрать фото</string>
     <string name="star_to_chose_photo">Перейти к выбору фотографии</string>
     <string name="chose_the_photo">Выберите фото</string>
+    <string name="ready">Готово</string>
+    <string name="LoginInApplication">Войти</string>
+    <string name="somethingWrongTryAgain">Что-то пошло не так, попробуйте войти ещё раз</string>
     <integer name="com_vk_sdk_AppId">7823461</integer>
     <string-array name="categories">
         <item>Женская одежда</item>
@@ -95,5 +97,19 @@
         <item>Уборка и помощь по хозяйству</item>
         <item>Курьеры и грузоперевозки</item>
         <item>Обучение и развитие</item>
+    </string-array>
+    <string-array name="paidStatus">
+        <item>Не оплачено</item>
+        <item>Оплачено</item>
+        <item>Возврат средств</item>
+    </string-array>
+    <string-array name="orderStatus">
+        <item>Новый</item>
+        <item>Согласуется</item>
+        <item>Собирается</item>
+        <item>Доставляется</item>
+        <item>Выполнен</item>
+        <item>Отменен</item>
+        <item>Возвращен</item>
     </string-array>
 </resources>

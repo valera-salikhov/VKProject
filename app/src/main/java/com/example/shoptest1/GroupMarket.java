@@ -1,7 +1,14 @@
 package com.example.shoptest1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.Person;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,13 +45,14 @@ public class GroupMarket extends AppCompatActivity {
 
         getProductsCall();
 
-        Log.d("GROUPID0", groupId);
         Product[] products = new Product[countProducts];
         for (int i = 0; i < countProducts; i++) {
             products[i] = new Product();
         }
         String[] items = new String[countProducts];
+
         getListGroups(items, products);
+
         String[] titles = new String[countProducts];
         String[] id = new String[countProducts];
         for (int i = 0; i < countProducts; i++) {
@@ -58,7 +66,10 @@ public class GroupMarket extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                FragmentManager manager = getSupportFragmentManager();
+                GroupMarket.DialogFragmentProductsEditor dialogFragmentGroupsEditor = new GroupMarket.DialogFragmentProductsEditor(GroupMarket.this,
+                        accessToken, products[position], manager, groupId);
+                dialogFragmentGroupsEditor.show(manager, "dialog");
             }
         });
 
@@ -68,15 +79,125 @@ public class GroupMarket extends AppCompatActivity {
                 Intent intent = new Intent(GroupMarket.this, CreateProduct.class);
                 intent.putExtra("group_id", groupId);
                 intent.putExtra("access_token", accessToken);
-                startActivityForResult(intent, 1);
-                //Intent intentForRetry = new Intent(GroupMarket.this, GroupMarket.class);
-                //startActivity(intentForRetry);
+                startActivity(intent);
             }
         });
     }
 
+
+    public static class DialogFragmentProductsEditor extends androidx.fragment.app.DialogFragment {
+
+        Context context;
+        String accessToken;
+        Product product;
+        private FragmentManager manager;
+        String groupId;
+
+        public DialogFragmentProductsEditor(Context context, String accessToken, Product product,
+                                            FragmentManager manager, String groupId) {
+            this.context = context;
+            this.accessToken = accessToken;
+            this.product = product;
+            this.manager = manager;
+            this.groupId = groupId;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            String title = "Что хотите сделать с этим товаром?";
+            String buttonProductsStr = "Изменить";
+            String buttonOrdersStr = "Удалить";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(title);
+            builder.setPositiveButton(buttonProductsStr, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(context, EditProduct.class);
+                    intent.putExtra("access_token", accessToken);
+                    intent.putExtra("group_id", groupId);
+                    intent.putExtra("productName", product.title);
+                    intent.putExtra("description", product.description);
+                    intent.putExtra("price", product.priceAmount);
+                    intent.putExtra("dimension_width", product.dimensions_width);        // trying to see
+                    intent.putExtra("dimensions_height", product.dimensions_height);     // trying to see
+                    intent.putExtra("dimensions_length", product.dimensions_length);     // trying to see
+                    intent.putExtra("weight", product.weight);                           // trying to see
+                    intent.putExtra("sku", product.sku);                                 // trying to see
+                    intent.putExtra("item_id", String.valueOf(product.id));
+                    Log.d("PRODUCTID", String.valueOf(product.id));
+                    startActivityForResult(intent, 1);
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton(buttonOrdersStr, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    GroupMarket.DialogYesOrNo DialogYesOrNo = new GroupMarket.DialogYesOrNo(context,
+                            accessToken, product, groupId);
+                    DialogYesOrNo.show(manager, "dialog");
+                    dialog.dismiss();
+                }
+            });
+            builder.setCancelable(false);
+            return builder.create();
+        }
+    }
+
+    public static class DialogYesOrNo extends androidx.fragment.app.DialogFragment {
+
+        Context context;
+        String accessToken;
+        Product product;
+        String groupId;
+
+        public DialogYesOrNo(Context context, String accessToken, Product product, String groupId) {
+            this.context = context;
+            this.accessToken = accessToken;
+            this.product = product;
+            this.groupId = groupId;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            String title = "Уверены, что хотите удалить товар?";
+            String buttonProductsStr = "Да";
+            String buttonOrdersStr = "Нет";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(title);
+            builder.setPositiveButton(buttonProductsStr, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String url = "https://api.vk.com/method/market.delete?v=5.131&access_token=" +
+                            accessToken + "&owner_id=-" + groupId + "&item_id=" + product.id;
+                    GetCall getCall = new GetCall();
+                    try {
+                        String response = getCall.execute(url).get();
+                        Log.d("ONDELETE", response);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            builder.setNegativeButton(buttonOrdersStr, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setCancelable(false);
+            return builder.create();
+        }
+    }
+
+
     private void getProductsCall() {
-        String url = "https://api.vk.com/method/market.get?v=5.52&access_token=" +
+        String url = "https://api.vk.com/method/market.get?v=5.131&access_token=" +
                 accessToken + "&owner_id=-" + groupId;
         GetCall getProducts = new GetCall();
         try {
