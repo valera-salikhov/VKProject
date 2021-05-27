@@ -1,31 +1,25 @@
 package com.example.shoptest1;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Person;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.io.IOException;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class GroupMarket extends AppCompatActivity {
 
     int countProducts;
@@ -55,14 +49,35 @@ public class GroupMarket extends AppCompatActivity {
 
         String[] titles = new String[countProducts];
         String[] id = new String[countProducts];
+
+        String[] price = new String[countProducts];
+        String[] urlPhoto = new String[countProducts];
+
         for (int i = 0; i < countProducts; i++) {
             titles[i] = products[i].title;
+            price[i] = products[i].priceText;
+            urlPhoto[i] = products[i].thumbPhoto;
             id[i] = String.valueOf(products[i].id);
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(GroupMarket.this,
-                android.R.layout.simple_list_item_1, titles);
-        listView.setAdapter(arrayAdapter);
+        ArrayList<Map<String, Object>> data = new ArrayList<Map<String, Object>>(countProducts);
+        Map<String, Object> map;
+        for (int i = 0; i < countProducts; i++) {
+            map = new HashMap<String, Object>();
+            map.put("titles", titles[i]);
+            map.put("price", price[i]);
+            data.add(map);
+        }
+
+        String[] from = {"titles", "price"};
+        int[] to = {R.id.productProduct, R.id.productPrice};
+
+        CustomAdapterForProducts customAdapterForProducts = new CustomAdapterForProducts(GroupMarket.this,
+                data, R.layout.cuistom_textview_for_products, from, to, urlPhoto);
+
+        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(GroupMarket.this, android.R.layout.simple_list_item_1, titles);
+        //listView.setAdapter(arrayAdapter);
+        listView.setAdapter(customAdapterForProducts);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

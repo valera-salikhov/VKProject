@@ -1,26 +1,22 @@
 package com.example.shoptest1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.concurrent.ExecutionException;
 
 public class EditProduct extends AppCompatActivity {
 
-    EditText productNameChange, descriptionChange, priceChange, dimension_widthChange,
-            dimension_heightChange, dimension_lengthChange,
-            weightChange, skuChange;
+    EditText productNameChange, descriptionChange, priceChange;
     String accessToken = new String(), ownerId = new String();
     Button doneChange;
-    Button choosePhoto;
     String category = new String();
     String productId = new String();
 
@@ -36,21 +32,11 @@ public class EditProduct extends AppCompatActivity {
         productNameChange = findViewById(R.id.editProductNameChange);
         descriptionChange = findViewById(R.id.editDescriptionChange);
         priceChange = findViewById(R.id.editPriceChange);
-        dimension_widthChange = findViewById(R.id.edit_dimension_widthChange);
-        dimension_heightChange = findViewById(R.id.edit_dimension_heightChange);
-        dimension_lengthChange = findViewById(R.id.edit_dimension_lengthChange);
-        weightChange = findViewById(R.id.editWeightChange);
-        skuChange = findViewById(R.id.editSkuChange);
         productId = getIntent().getStringExtra("item_id");
 
         productNameChange.setText(getIntent().getStringExtra("productName"));
         descriptionChange.setText(getIntent().getStringExtra("description"));
         priceChange.setText(getIntent().getStringExtra("price"));
-        dimension_widthChange.setText(getIntent().getStringExtra("dimension_width"));
-        dimension_heightChange.setText(getIntent().getStringExtra("dimension_height"));
-        dimension_lengthChange.setText(getIntent().getStringExtra("dimension_length"));
-        weightChange.setText(getIntent().getStringExtra("weight"));
-        skuChange.setText(getIntent().getStringExtra("sku"));
 
         doneChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,16 +56,10 @@ public class EditProduct extends AppCompatActivity {
                             accessToken + "&owner_id=-" + ownerId + "&item_id=" + productId +
                             "&name=" + productNameChange.getText() + "&description=" +
                             descriptionChange.getText() + "&category_id=" + category +
-                            "&price=" + priceChange.getText() + "&old_price=" + priceChange.getText() +
-                            "&dimension_width=" +
-                            dimension_widthChange.getText() + "&dimension_height=" +
-                            dimension_heightChange.getText() + "&dimension_length=" +
-                            dimension_lengthChange.getText() + "&weight=" + weightChange.getText();   // sku only from 5.131
-                    //Log.d("URRRRRRRRRRRRRRL", url);
+                            "&price=" + priceChange.getText() + "&old_price=" + priceChange.getText();
                     GetCall getCall = new GetCall();
                     try {
-                        String response = getCall.execute(url).get();           // добавить проверку на ошибку запроса (тч на количество символов в названии/описании)
-                        //Log.d("RESP875Onse", response);
+                        String response = getCall.execute(url).get();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {

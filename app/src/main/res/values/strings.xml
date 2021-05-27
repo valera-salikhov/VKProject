@@ -12,6 +12,21 @@
     <string name="ready">Готово</string>
     <string name="LoginInApplication">Войти</string>
     <string name="somethingWrongTryAgain">Что-то пошло не так, попробуйте войти ещё раз</string>
+    <string name="save_photo">Сохранить фото</string>
+    <string name="new_name">Новое название</string>
+    <string name="number_of_order">Номер заказа:</string>
+    <string name="product_line">Товар:</string>
+    <string name="group_seller_line">Группа-продавец:</string>
+    <string name="price_product_line">Стоимость заказа:</string>
+    <string name="address_product_line">Адрес доставки:</string>
+    <string name="customer_product_line">Покупатель:</string>
+    <string name="status_order_line">Статус заказа:</string>
+    <string name="make_changes">Внести изменения</string>
+    <string name="accept_changes">Принять изменения</string>
+    <string name="price_line">Стоимость:</string>
+    <string name="group_line">Группа:</string>
+    <string name="customer_line">Заказчик:</string>
+    <string name="status_line">Состояние:</string>
     <integer name="com_vk_sdk_AppId">7823461</integer>
     <string-array name="categories">
         <item>Женская одежда</item>

@@ -1,19 +1,13 @@
 package com.example.shoptest1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
-import com.squareup.picasso.Picasso;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,25 +43,20 @@ public class GroupOrders extends AppCompatActivity {
 
         getListOrders(items, orders);
 
-
-
         String[] customersNames = new String[countOrders];
         String[] orderPrice = new String[countOrders];
         String[] orderStatus = new String[countOrders];
-        ImageView[] orderPhoto = new ImageView[countOrders];
-        //int[] orderPhotoAdapter = new int[countOrders];
+        String[] productOrder = new String[countOrders];
+        String[] groupOrder = new String[countOrders];
+        String[] orderPhoto = new String[countOrders];
+
         for (int i = 0; i < countOrders; i++) {
             customersNames[i] = getCustomerName(orders[i].userId);
             orderPrice[i] = orders[i].totalPriceText;
             orderStatus[i] = getStatusName(orders[i].status);
-            if (!orders[i].thumbPhoto.equals("")) {
-                //orderPhoto[i] = findViewById(R.id.imageView);
-                //Picasso.with(this).load(orders[i].thumbPhoto).into(orderPhoto[i]);
-                //orderPhotoAdapter[i] = orderPhoto[i].getId();
-                //Log.d("PHOTO", String.valueOf(orderPhotoAdapter[i]));
-            }
-            //orderPhoto[i] = Integer.parseInt(orders[i].thumbPhoto);
-            //Log.d("PHOTO", String.valueOf(orderPhoto[i]));
+            productOrder[i] = orders[i].title;
+            groupOrder[i] = orders[i].sellerName;
+            orderPhoto[i] = orders[i].thumbPhoto;
         }
         
         ArrayList<Map<String, Object>> data = new ArrayList<Map<String, Object>>(countOrders);
@@ -77,14 +66,16 @@ public class GroupOrders extends AppCompatActivity {
             map.put("customerName", customersNames[i]);
             map.put("orderPrice", orderPrice[i]);
             map.put("orderStatus", orderStatus[i]);
-            //map.put("orderPhoto", orderPhotoAdapter[i]);
+            map.put("productOrder", productOrder[i]);
+            map.put("groupOrder", groupOrder[i]);
             data.add(map);
         }
 
-        String[] from = {"customerName", "orderPrice", "orderStatus", "orderPhoto"};
-        int[] to = {R.id.customerOrder, R.id.orderPrice, R.id.statusOrder, R.id.orderPhoto};
+        String[] from = {"customerName", "orderPrice", "orderStatus", "productOrder", "groupOrder"};
+        int[] to = {R.id.customerOrder, R.id.orderPrice, R.id.statusOrder, R.id.productOrder, R.id.groupOrder};
 
-        SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.custom_listview, from, to);
+        CustomAdapter adapter = new CustomAdapter(this, data, R.layout.custom_listview,
+                from, to, orderPhoto);
         listViewOrders.setAdapter(adapter);
 
         listViewOrders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,8 +88,9 @@ public class GroupOrders extends AppCompatActivity {
                 intent.putExtra("orderPrice", orders[position].totalPriceText);
                 intent.putExtra("customerName", getCustomerName(orders[position].userId));
                 intent.putExtra("orderAddress", orders[position].address);
-                //intent.putExtra("customerTelephoneNumber", orders[i].)
                 intent.putExtra("orderStatus", orders[position].status);
+                intent.putExtra("productNameInOrder", orders[position].title);
+                intent.putExtra("sellerNameOrder", orders[position].sellerName);
                 startActivity(intent);
             }
         });
@@ -126,7 +118,6 @@ public class GroupOrders extends AppCompatActivity {
         }
     }
 
-
     private void getListOrders(String[] items, Orders[] orders) {
         int start = ordersStr.indexOf("{", ordersStr.indexOf("items")) + 1;
         for (int i = 0; i < countOrders; i++) {
@@ -135,11 +126,9 @@ public class GroupOrders extends AppCompatActivity {
             int end = ordersStr.indexOf("}}", startOfTheEnd) + 1;
             items[i] = new StringBuilder(ordersStr).substring(start, end);
             start = end + 3;
-            //Log.d("ITEM" + i, items[i]);
         }
 
         for (int i = 0; i < countOrders; i++) {
-            // Log.d("ITEMS" + i, items[i]);
             Orders.toOrder(orders[i], items[i]);
         }
     }

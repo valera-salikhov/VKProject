@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutionException;
 
 public class OrdersInfo extends AppCompatActivity {
 
-    Spinner spinnerPaidStatus, spinnerOrderStatus;
-    TextView idOfOrder, orderPrice, customerTelephoneNumber, orderAddress, customerName, paidStatus,
-            orderStatus;
+    Spinner spinnerOrderStatus;
+    TextView idOfOrder, orderPrice, orderAddress, customerName, orderStatus, productNameInOrder,
+            sellerNameOrder;
     Button acceptСhanges;
     String fullIdOrder = new String();
     String accessToken = new String();
@@ -31,23 +31,22 @@ public class OrdersInfo extends AppCompatActivity {
         fullIdOrder = getIntent().getStringExtra("displayOrderId");
 
         acceptСhanges = findViewById(R.id.acceptСhanges);
-        spinnerPaidStatus = findViewById(R.id.spinnerPaidStatus);
         spinnerOrderStatus = findViewById(R.id.spinneOrderStatus);
         idOfOrder = findViewById(R.id.idOfOrder);
         orderPrice = findViewById(R.id.orderPrice);
-        //customerTelephoneNumber = findViewById(R.id.customerTelephoneNumber);
         orderAddress = findViewById(R.id.orderAddress);
         customerName = findViewById(R.id.customerName);
-        paidStatus = findViewById(R.id.paidStatus);
         orderStatus = findViewById(R.id.orderStatus);
+        productNameInOrder = findViewById(R.id.productNameInOrder);
+        sellerNameOrder = findViewById(R.id.sellerNameOrder);
 
         idOfOrder.setText(fullIdOrder);
         orderPrice.setText(getIntent().getStringExtra("orderPrice"));
-        //customerTelephoneNumber.setText(getIntent().getStringExtra("customerTelephoneNumber"));
         orderAddress.setText(getIntent().getStringExtra("orderAddress"));
         customerName.setText(getIntent().getStringExtra("customerName"));
-        //paidStatus.setText();
         orderStatus.setText(fromOrderStatus(getIntent().getStringExtra("orderStatus")));
+        productNameInOrder.setText(getIntent().getStringExtra("productNameInOrder"));
+        sellerNameOrder.setText(getIntent().getStringExtra("sellerNameOrder"));
 
         acceptСhanges.setOnClickListener(new View.OnClickListener() {
             @Override

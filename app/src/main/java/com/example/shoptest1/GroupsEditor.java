@@ -22,7 +22,6 @@ public class GroupsEditor extends AppCompatActivity {
     String groupsStr = new String();
     int countGroups;
     String accessToken = new String();
-    String dialogButtonChose = new String();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class GroupsEditor extends AppCompatActivity {
         for (int i = 0; i < countGroups; i++) {
             groups[i] = new Group();
         }
-        //Log.d("GetGroups!", String.valueOf(countGroups));
         String[] groupNames = new String[countGroups];
         String[] groupId = new String[countGroups];
         String[] items = new String[countGroups];
@@ -78,9 +76,7 @@ public class GroupsEditor extends AppCompatActivity {
             items[i] = new StringBuilder(groupsStr).substring(start, end);
             start = end + 3;
         }
-        //Log.d("ITEM0", groupsStr);
         for (int i = 0; i < countGroups; i++) {
-           // Log.d("ITEMS" + i, items[i]);
            Group.toGroup(groups[i], items[i]);
         }
 
@@ -110,7 +106,6 @@ public class GroupsEditor extends AppCompatActivity {
             builder.setPositiveButton(buttonProductsStr, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //((GroupsEditor)getActivity()).dialogButtonChose = buttonProductsStr;
                     Intent intent = new Intent(context, GroupMarket.class);
                     intent.putExtra("access_token", accessToken);
                     intent.putExtra("group_id", groupId);
@@ -121,7 +116,6 @@ public class GroupsEditor extends AppCompatActivity {
             builder.setNegativeButton(buttonOrdersStr, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //((GroupsEditor)getActivity()).dialogButtonChose = buttonOrdersStr;
                     Intent intent = new Intent(context, GroupOrders.class);
                     intent.putExtra("access_token", accessToken);
                     intent.putExtra("group_id", groupId);

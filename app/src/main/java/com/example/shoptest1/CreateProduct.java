@@ -1,51 +1,22 @@
 package com.example.shoptest1;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.HttpEntityWrapper;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
-
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import okhttp3.Call;
@@ -59,19 +30,23 @@ import okhttp3.Response;
 
 public class CreateProduct extends AppCompatActivity {
 
-    static final int GALLERY_REQUEST = 1;
-    public static String mainPhotoUriStr = new String();
-    //OkHttpClient client = new OkHttpClient();
 
-    EditText productName, description, price, dimension_width, dimension_height, dimension_length,
-            weight, sku;
-    String accessToken = new String(), ownerId = new String();
+    public static String mainPhotoUriStr = new String();
+
+    EditText productName, description, price;
+    String accessToken = new String(), ownerId = new String(), respStr = new String();
     Button done;
-    Button choosePhoto;
+    Button choosePhoto, savePhoto;
     String  category = new String();
     Uri mainPhotoUri;
     private String uploadUrl = new String();
     String uploadUrlWithoutBrackets = new String(), uploadUrlWithoutBracketsWithSlashes = new String();
+
+    String photo = new String();
+    String server = new String();
+    String hash = new String();
+    String crop_data = new String();
+    String crop_hash = new String();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,45 +56,34 @@ public class CreateProduct extends AppCompatActivity {
         ownerId = getIntent().getStringExtra("group_id");
         done = findViewById(R.id.done);
         choosePhoto = findViewById(R.id.choosePhoto);
+        savePhoto = findViewById(R.id.save_image);
+        Spinner spinner = findViewById(R.id.spinnerCategory);
+        done = findViewById(R.id.done);
+        choosePhoto = findViewById(R.id.choosePhoto);
+        productName = findViewById(R.id.editProductName);
+        description = findViewById(R.id.editDescription);
+        price = findViewById(R.id.editPrice);
+
         choosePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUrlPhoto();
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+                startActivityForResult(photoPickerIntent, Constants.GALLERY_REQUEST);
                 uploadUrlWithoutBrackets = new StringBuilder(uploadUrl).substring(uploadUrl.indexOf("https"), uploadUrl.indexOf("\"", uploadUrl.indexOf("https")));
                 for (int i = 0; i < uploadUrlWithoutBrackets.length(); i++) {
                     if (uploadUrlWithoutBrackets.charAt(i) == '\\') {
-                        //uploadUrlWithoutBracketsWithSlashes += '\\';
                         continue;
                     }
                     uploadUrlWithoutBracketsWithSlashes += uploadUrlWithoutBrackets.charAt(i);
                 }
-                Log.d("WEHERE", uploadUrlWithoutBracketsWithSlashes);
-                Log.d("VERSION", String.valueOf(Build.VERSION.SDK_INT));
-
-
-                //Log.d("URLPHOTO1", uploadUrlWithoutBrackets);
-                //Log.d("URIPHOTO", mainPhotoUriStr);
             }
         });
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                PostCall postCall = new PostCall();
-                try {
-                    String s = postCall.execute().get();
-                    Log.d("POSTCALL", s);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                 */
                 PostCall postCall = new PostCall();
                 String resp = new String();
                 try {
@@ -132,48 +96,16 @@ public class CreateProduct extends AppCompatActivity {
                 }
             }
         });
-        /*
 
-        String uploadUrl = new String();
-
-        //Log.d("GROUPID1", ownerId);
-        Spinner spinner = findViewById(R.id.spinnerCategory);
-        done = findViewById(R.id.done);
-        choosePhoto = findViewById(R.id.choosePhoto);
-        productName = findViewById(R.id.editProductName);
-        description = findViewById(R.id.editDescription);
-        price = findViewById(R.id.editPrice);
-        dimension_width = findViewById(R.id.edit_dimension_width);
-        dimension_height = findViewById(R.id.edit_dimension_height);
-        dimension_length = findViewById(R.id.edit_dimension_length);
-        weight = findViewById(R.id.editWeight);
-        sku = findViewById(R.id.editSku);
-        String selected = spinner.getSelectedItem().toString();
-        //Log.d("SPINNER", selected);
-        done.setOnClickListener(new View.OnClickListener() {
+        savePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCategory(spinner);
-                addProduct();
+
             }
         });
-
-        choosePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getUrlPhoto();
-                Log.d("URLPHOTO1", uploadUrl);
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
-            }
-        });
-
-         */
-
     }
 
-    public static Boolean uploadFile(String serverURL, File file, OkHttpClient client, String groupId) {
+    public Boolean uploadFile(String serverURL, File file, OkHttpClient client, String groupId) {
         try {
 
             RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -186,8 +118,7 @@ public class CreateProduct extends AppCompatActivity {
                     .post(requestBody)
                     .build();
 
-            Response r = client.newCall(request).execute();
-                    /*.enqueue(new Callback() {
+            client.newCall(request).enqueue(new Callback() {
 
                 @Override
                 public void onFailure(final Call call, final IOException e) {
@@ -199,10 +130,17 @@ public class CreateProduct extends AppCompatActivity {
                     if (!response.isSuccessful()) {
                         Log.d("ERRRRRROOOOORRR", ";(");
                     }
-                    Log.d("RESPONSE", response.toString());
+                    respStr = response.body().string();
+
+                    parseResponseUploadUrl(respStr);
+                    Log.d("ABABADBDBA9999999", photo);
+                    saveMarketPhoto();
+                    //Log.d("RESP345ONS113E", respStr);
+                    //Log.d("RESP345ONS113E", response.body().string());
                 }
-            });*/
-            Log.d("RE111SP",String.valueOf(r.code()));
+            });
+
+            //Log.d("RE111SP",String.valueOf(r.code()));
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -211,57 +149,27 @@ public class CreateProduct extends AppCompatActivity {
     }
 
     public class PostCall extends AsyncTask<String, Integer, String> {
-        OkHttpClient client = new OkHttpClient();
         @Override
         protected String doInBackground(String... strings) {
             File photoFile = new File(mainPhotoUriStr);
-            return String.valueOf(uploadFile(uploadUrlWithoutBracketsWithSlashes, photoFile,client,
-                    ownerId));
-        }
-    }
-/*
-    public class PostCall extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-           // HttpClient client = HttpClientBuilder.create().build();
-            File filePhoto = new File(mainPhotoUriStr);
-            HttpPost post = new HttpPost(uploadUrlWithoutBracketsWithSlashes);
-            FileBody fileBody = new FileBody(filePhoto, ContentType.DEFAULT_BINARY);
-
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            builder.addPart("file", fileBody);
-            HttpEntity entity = builder.build();
-
-            post.setEntity(entity);
-            try {
-                HttpResponse response = client.execute(post);
-                Log.d("RESPONSE", response.toString());
-                return response.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
+            return String.valueOf(uploadFile(uploadUrlWithoutBracketsWithSlashes, photoFile,
+                    Constants.client, ownerId));
         }
     }
 
- */
-
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case GALLERY_REQUEST:
-                if (resultCode == RESULT_OK) {
-                    mainPhoto = data.getData();
-                    mainPhotoStr = mainPhoto.toString();
-                }
-                break;
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
         }
+        return result;
     }
-
-     */
 
     private String getUrlPhoto() {
         String url = "https://api.vk.com/method/photos.getMarketUploadServer?v=5.52&access_token=" +
@@ -283,12 +191,10 @@ public class CreateProduct extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case GALLERY_REQUEST:
+            case Constants.GALLERY_REQUEST:
                 if (resultCode == RESULT_OK) {
                     mainPhotoUri = data.getData();
-                    String str = mainPhotoUri.toString();
-                    mainPhotoUriStr = new StringBuilder(str).substring(str.indexOf("/") + 1,
-                            str.length());
+                    mainPhotoUriStr = getRealPathFromURI(mainPhotoUri);
                     Log.d("URIPHOTO", mainPhotoUriStr);
                 }
                 break;
@@ -562,6 +468,73 @@ public class CreateProduct extends AppCompatActivity {
             Intent i = new Intent(CreateProduct.this, GroupMarket.class);
             setResult(1, i);
             finish();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void parseResponseUploadUrl(String respStr) {
+        server = new StringBuilder(respStr).substring(respStr.indexOf("server") + 8,
+                respStr.indexOf(",", respStr.indexOf("server") + 8));
+
+        int startOfPhoto = respStr.indexOf("photo") + 8;
+        int endOfPhoto =  respStr.indexOf("}]\"", respStr.indexOf("photo") + 8);
+        for (int i = startOfPhoto; i <= endOfPhoto; i++) {
+            /*
+            if (respStr.charAt(i) == '\\') {
+                continue;
+            }
+             */
+
+            if (respStr.charAt(i) == '\"' || respStr.charAt(i) == '\\') {
+                continue;
+            }
+            photo += respStr.charAt(i);
+        }
+
+        hash = new StringBuilder(respStr).substring(respStr.indexOf("hash") + 7,
+                respStr.indexOf("\"", respStr.indexOf("hash") + 7));
+
+        int startOfCropData = respStr.indexOf("crop_data") + 12;
+        if (respStr.charAt(startOfCropData) == '{') {
+            //crop_data = new StringBuilder(respStr).substring(startOfCropData, respStr.indexOf("}\"", startOfCropData));
+            int endOfCropData = respStr.indexOf("}\"", startOfCropData);
+            for (int i = startOfCropData; i <= endOfCropData; i++) {
+                if (respStr.charAt(i) == '\"' || respStr.charAt(i) == '\\') {
+                    continue;
+                }
+                crop_data += respStr.charAt(i);
+            }
+        } else {
+            crop_data = new StringBuilder(respStr).substring(startOfCropData,
+                    respStr.indexOf("\"", startOfCropData));
+        }
+
+        crop_hash = new StringBuilder(respStr).substring(respStr.indexOf("crop_hash") + 12,
+                respStr.indexOf("\"", respStr.indexOf("crop_hash") + 12));
+    }
+
+    private void saveMarketPhoto() {
+
+        String url = "https://api.vk.com/method/photos.saveMarketPhoto?v=5.131&access_token=" +
+                accessToken + "&group_id=" + ownerId + "&photo=" + photo + "&server=" + server +
+                "&hash=" + hash + "&crop_data=" + crop_data + "&crop_hash=" + crop_hash;
+
+
+        /*
+        String url = "https://api.vk.com/method/photos.saveMarketPhoto?v=5.131&access_token=" +
+                accessToken + "&group_id=" + ownerId + "&photo=[{&#092;&quot;photo&#092;&quot;:&#092;&quot;7bd1ca106b:x&#092;&quot;,&#092;&quot;sizes&#092;&quot;:[[&#092;&quot;s&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37ad9&#092;&quot;,&#092;&quot;DvnfaTm33hY&#092;&quot;,75,75],[&#092;&quot;m&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37ada&#092;&quot;,&#092;&quot;cEX9d-SUy2A&#092;&quot;,130,130],[&#092;&quot;x&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37adb&#092;&quot;,&#092;&quot;RuYsz_jLHgs&#092;&quot;,604,604],[&#092;&quot;o&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37adc&#092;&quot;,&#092;&quot;UHcixoGaPcw&#092;&quot;,130,130],[&#092;&quot;p&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37add&#092;&quot;,&#092;&quot;Rvl9zpgbhH0&#092;&quot;,200,200],[&#092;&quot;q&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37ade&#092;&quot;,&#092;&quot;ZCI6XRFcP4g&#092;&quot;,320,320],[&#092;&quot;r&#092;&quot;,&#092;&quot;633819852&#092;&quot;,&#092;&quot;37adf&#092;&quot;,&#092;&quot;qz84miJ-YJQ&#092;&quot;,510,510]],&#092;&quot;kid&#092;&quot;:&#092;&quot;8dd560da8e49366f79556497341862c4&#092;&quot;,&#092;&quot;debug&#092;&quot;:&#092;&quot;xsxmxxxoxpxqxrx&#092;&quot;}]"
+                + "&server=" + server +
+                "&hash=" + hash + "&crop_data=" + crop_data + "&crop_hash=" + crop_hash;
+
+         */
+        Log.d("ABABADBDBA", url);
+        GetCall getCall = new GetCall();
+        try {
+            String resp = getCall.execute(url).get();
+            Log.d("ABABADBDBA1", resp);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

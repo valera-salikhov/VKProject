@@ -12,12 +12,11 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/orderPhotoImageView"
+            android:layout_width="101dp"
+            android:layout_height="94dp"
             android:adjustViewBounds="true"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/orderPhoto">
-        </ImageView>
+            android:src="@drawable/no_photo"></ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,13 +31,51 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Заказчик:"></TextView>
+                    android:text="@string/product_line"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/productOrder"
+                    android:text="">
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/group_line"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/groupOrder"
+                    android:text="">
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/customer_line"></TextView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/customerOrder"
-                    android:text="Я заказчик">
+                    android:text="">
                 </TextView>
 
             </LinearLayout>
@@ -51,13 +88,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Стоимость:"></TextView>
+                    android:text="@string/price_line"></TextView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/orderPrice"
-                    android:text="1000000000">
+                    android:text="">
                 </TextView>
 
             </LinearLayout>
@@ -70,13 +107,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Состояние:"></TextView>
+                    android:text="@string/status_line"></TextView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/statusOrder"
-                    android:text="Оплачено">
+                    android:text="">
                 </TextView>
 
             </LinearLayout>

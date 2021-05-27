@@ -9,13 +9,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class GetCall extends AsyncTask<String, Integer, String> {
-    OkHttpClient client = new OkHttpClient();
     @Override
     protected String doInBackground(String... urls) {
         String url = urls[0];
         Request request = new Request.Builder().url(url).build();
 
-        try (Response response = client.newCall(request).execute()) {
+        try (Response response = Constants.client.newCall(request).execute()) {
             String resp = response.body().string();
             return resp;
         } catch (IOException e) {
