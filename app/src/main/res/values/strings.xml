@@ -27,6 +27,8 @@
     <string name="group_line">Группа:</string>
     <string name="customer_line">Заказчик:</string>
     <string name="status_line">Состояние:</string>
+    <string name="count_products_in_order">Количество товара в заказе:</string>
+    <string name="category">Категория:</string>
     <integer name="com_vk_sdk_AppId">7823461</integer>
     <string-array name="categories">
         <item>Женская одежда</item>

@@ -21,6 +21,7 @@ public class Orders {
     String dimensions_width;
     String dimensions_height;
     String dimensions_length;
+    String quantity;
 
     public Orders() {
         this.id = "-1";
@@ -43,6 +44,7 @@ public class Orders {
         this.dimensions_width = "-1";
         this.dimensions_height = "-1";
         this.dimensions_length = "-1";
+        this.quantity = "-1";
     }
 
     public static void toOrder(Orders order, String item) {
@@ -94,6 +96,9 @@ public class Orders {
         int startDimensions_length = item.indexOf("length", item.indexOf("dimensions")) + 8;
         order.dimensions_length = new StringBuilder(item).substring(startDimensions_length,
                 item.indexOf("}", startDimensions_length));
+
+        order.quantity = new StringBuilder(item).substring(item.indexOf("quantity") + 10,
+                item.indexOf(",", item.indexOf("quantity") + 10));
 
     }
 

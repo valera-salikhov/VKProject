@@ -19,7 +19,7 @@ public class Product {
     String title;                  // название товара
     String date;                   // дата
     String thumbPhoto;             // ссылка на фотографию товара
-    int cartQuantity;
+    String cartQuantity;
     String dimensions_width;
     String dimensions_height;
     String dimensions_length;
@@ -30,7 +30,7 @@ public class Product {
     public Product(int availability, int categoryId, String categoryName, int categorySectionId,
                     String categorySectionName, String description, int id, int ownerId,
                    String priceAmount, int priceCurrencyId, String priceCurrencyName, String priceCurrencyTitle,
-                    String priceText, String title, String date, String thumbPhoto, int cartQuantity, String dimensions_width,
+                    String priceText, String title, String date, String thumbPhoto, String cartQuantity, String dimensions_width,
                    String dimensions_height, String dimensions_length, String weight, String sku) {
         this.availability = availability;
         this.categoryId = categoryId;
@@ -73,7 +73,7 @@ public class Product {
         this.title = "";
         this.date = "";
         this.thumbPhoto = "";
-        this.cartQuantity = -1;
+        this.cartQuantity = "-1";
         this.dimensions_width = "";
         this.dimensions_height = "";
         this.dimensions_length = "";
@@ -114,7 +114,7 @@ public class Product {
                 item.indexOf(",", item.indexOf("date")));
         product.thumbPhoto = new StringBuilder(item).substring(item.indexOf("thumb_photo") + 14,
                 item.indexOf("\",", item.indexOf("thumb_photo")));
-        product.cartQuantity = Integer.parseInt(new StringBuilder(item).substring(item.indexOf("cart_quantity") + 15,
-                item.indexOf("cart_quantity") + 16));
+        product.cartQuantity = new StringBuilder(item).substring(item.indexOf("cart_quantity") + 15,
+                item.indexOf("cart_quantity") + 16);
     }
 }

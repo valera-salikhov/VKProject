@@ -16,7 +16,7 @@ public class OrdersInfo extends AppCompatActivity {
 
     Spinner spinnerOrderStatus;
     TextView idOfOrder, orderPrice, orderAddress, customerName, orderStatus, productNameInOrder,
-            sellerNameOrder;
+            sellerNameOrder, countProductsInOrder;
     Button acceptСhanges;
     String fullIdOrder = new String();
     String accessToken = new String();
@@ -39,6 +39,7 @@ public class OrdersInfo extends AppCompatActivity {
         orderStatus = findViewById(R.id.orderStatus);
         productNameInOrder = findViewById(R.id.productNameInOrder);
         sellerNameOrder = findViewById(R.id.sellerNameOrder);
+        countProductsInOrder = findViewById(R.id.countProductsInOrder);
 
         idOfOrder.setText(fullIdOrder);
         orderPrice.setText(getIntent().getStringExtra("orderPrice"));
@@ -47,6 +48,7 @@ public class OrdersInfo extends AppCompatActivity {
         orderStatus.setText(fromOrderStatus(getIntent().getStringExtra("orderStatus")));
         productNameInOrder.setText(getIntent().getStringExtra("productNameInOrder"));
         sellerNameOrder.setText(getIntent().getStringExtra("sellerNameOrder"));
+        countProductsInOrder.setText(getIntent().getStringExtra("quantity"));
 
         acceptСhanges.setOnClickListener(new View.OnClickListener() {
             @Override

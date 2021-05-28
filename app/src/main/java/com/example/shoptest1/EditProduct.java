@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 public class EditProduct extends AppCompatActivity {
 
+    TextView priceLayout;
     EditText productNameChange, descriptionChange, priceChange;
     String accessToken = new String(), ownerId = new String();
     Button doneChange;
@@ -36,7 +38,19 @@ public class EditProduct extends AppCompatActivity {
 
         productNameChange.setText(getIntent().getStringExtra("productName"));
         descriptionChange.setText(getIntent().getStringExtra("description"));
-        priceChange.setText(getIntent().getStringExtra("price"));
+        String priceText = getIntent().getStringExtra("price");
+        String numberOfPrice = "";
+        for (int i = 0; i < priceText.length(); i++) {
+            if (priceText.charAt(i) != '0' && priceText.charAt(i) != '1' &&
+                    priceText.charAt(i) != '2' && priceText.charAt(i) != '3' &&
+                    priceText.charAt(i) != '4' && priceText.charAt(i) != '5' &&
+                    priceText.charAt(i) != '6' && priceText.charAt(i) != '7' &&
+                    priceText.charAt(i) != '8' && priceText.charAt(i) != '9') {
+                break;
+            }
+            numberOfPrice += priceText.charAt(i);
+        }
+        priceChange.setText(numberOfPrice);
 
         doneChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +71,8 @@ public class EditProduct extends AppCompatActivity {
                             "&name=" + productNameChange.getText() + "&description=" +
                             descriptionChange.getText() + "&category_id=" + category +
                             "&price=" + priceChange.getText() + "&old_price=" + priceChange.getText();
+                    Intent intent = new Intent(EditProduct.this, GroupMarket.class); // toast короткий
+                    startActivity(intent);
                     GetCall getCall = new GetCall();
                     try {
                         String response = getCall.execute(url).get();
@@ -66,8 +82,6 @@ public class EditProduct extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                Intent intent = new Intent(EditProduct.this, GroupMarket.class); // toast короткий
-                startActivity(intent);
             }
         });
     }

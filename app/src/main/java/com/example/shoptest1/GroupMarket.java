@@ -52,11 +52,13 @@ public class GroupMarket extends AppCompatActivity {
 
         String[] price = new String[countProducts];
         String[] urlPhoto = new String[countProducts];
+        String[] productCategory = new String[countProducts];
 
         for (int i = 0; i < countProducts; i++) {
             titles[i] = products[i].title;
             price[i] = products[i].priceText;
             urlPhoto[i] = products[i].thumbPhoto;
+            productCategory[i] = products[i].categoryName;
             id[i] = String.valueOf(products[i].id);
         }
 
@@ -66,17 +68,16 @@ public class GroupMarket extends AppCompatActivity {
             map = new HashMap<String, Object>();
             map.put("titles", titles[i]);
             map.put("price", price[i]);
+            map.put("productCategory", productCategory[i]);
             data.add(map);
         }
 
-        String[] from = {"titles", "price"};
-        int[] to = {R.id.productProduct, R.id.productPrice};
+        String[] from = {"titles", "price", "productCategory"};
+        int[] to = {R.id.productProduct, R.id.productPrice, R.id.productCategory};
 
         CustomAdapterForProducts customAdapterForProducts = new CustomAdapterForProducts(GroupMarket.this,
                 data, R.layout.cuistom_textview_for_products, from, to, urlPhoto);
 
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(GroupMarket.this, android.R.layout.simple_list_item_1, titles);
-        //listView.setAdapter(arrayAdapter);
         listView.setAdapter(customAdapterForProducts);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -134,14 +135,13 @@ public class GroupMarket extends AppCompatActivity {
                     intent.putExtra("group_id", groupId);
                     intent.putExtra("productName", product.title);
                     intent.putExtra("description", product.description);
-                    intent.putExtra("price", product.priceAmount);
+                    intent.putExtra("price", product.priceText);
                     intent.putExtra("dimension_width", product.dimensions_width);        // trying to see
                     intent.putExtra("dimensions_height", product.dimensions_height);     // trying to see
                     intent.putExtra("dimensions_length", product.dimensions_length);     // trying to see
                     intent.putExtra("weight", product.weight);                           // trying to see
                     intent.putExtra("sku", product.sku);                                 // trying to see
                     intent.putExtra("item_id", String.valueOf(product.id));
-                    Log.d("PRODUCTID", String.valueOf(product.id));
                     startActivityForResult(intent, 1);
                     dialog.dismiss();
                 }
@@ -191,7 +191,6 @@ public class GroupMarket extends AppCompatActivity {
                     GetCall getCall = new GetCall();
                     try {
                         String response = getCall.execute(url).get();
-                        Log.d("ONDELETE", response);
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -217,7 +216,6 @@ public class GroupMarket extends AppCompatActivity {
         GetCall getProducts = new GetCall();
         try {
             productsStr = getProducts.execute(url).get();
-            Log.d("PRODUCTSTR", productsStr);
             countProducts = getCountProducts();
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -241,11 +239,9 @@ public class GroupMarket extends AppCompatActivity {
             int end = productsStr.indexOf("}", startOfEnd);
             items[i] = new StringBuilder(productsStr).substring(start, end);
             start = end + 3;
-            //Log.d("ITEM" + i, items[i]);
         }
 
         for (int i = 0; i < countProducts; i++) {
-            // Log.d("ITEMS" + i, items[i]);
             Product.toProducts(products[i], items[i]);
         }
     }

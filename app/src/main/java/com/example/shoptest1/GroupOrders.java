@@ -91,6 +91,7 @@ public class GroupOrders extends AppCompatActivity {
                 intent.putExtra("orderStatus", orders[position].status);
                 intent.putExtra("productNameInOrder", orders[position].title);
                 intent.putExtra("sellerNameOrder", orders[position].sellerName);
+                intent.putExtra("quantity", orders[position].quantity);
                 startActivity(intent);
             }
         });
@@ -120,6 +121,7 @@ public class GroupOrders extends AppCompatActivity {
 
     private void getListOrders(String[] items, Orders[] orders) {
         int start = ordersStr.indexOf("{", ordersStr.indexOf("items")) + 1;
+        Log.d("ITEM63125", ordersStr);
         for (int i = 0; i < countOrders; i++) {
             int indexPreStartOfEnd = ordersStr.indexOf("seller", start);
             int startOfTheEnd = ordersStr.indexOf("group_id", indexPreStartOfEnd);
