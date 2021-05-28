@@ -29,7 +29,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CreateProduct extends AppCompatActivity {
-
+// this part of code isn't ready
+// this part of code isn't ready
+// this part of code isn't ready
+// this part of code isn't ready
+// this part of code isn't ready
+// this part of code isn't ready
+// this part of code isn't ready
 
     public static String mainPhotoUriStr = new String();
 
@@ -88,7 +94,6 @@ public class CreateProduct extends AppCompatActivity {
                 String resp = new String();
                 try {
                     resp = postCall.execute().get();
-                    Log.d("OOOOOOOO", resp);
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -128,19 +133,18 @@ public class CreateProduct extends AppCompatActivity {
                 @Override
                 public void onResponse(final Call call, final Response response) throws IOException {
                     if (!response.isSuccessful()) {
-                        Log.d("ERRRRRROOOOORRR", ";(");
+
                     }
                     respStr = response.body().string();
 
                     parseResponseUploadUrl(respStr);
-                    Log.d("ABABADBDBA9999999", photo);
+
                     saveMarketPhoto();
-                    //Log.d("RESP345ONS113E", respStr);
-                    //Log.d("RESP345ONS113E", response.body().string());
+
                 }
             });
 
-            //Log.d("RE111SP",String.valueOf(r.code()));
+
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
